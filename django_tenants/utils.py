@@ -85,6 +85,11 @@ class schema_context(ContextDecorator):
 class tenant_context(schema_context):
     def __init__(self, *args, **kwargs):
         super().__init__(args[0].schema_name, **kwargs)
+        self.tenant = args[0]
+
+    def __enter__(self):
+        super().__enter__()
+        self.connection.set_tenant(self.tenant)
 
 
 def clean_tenant_url(url_string):
